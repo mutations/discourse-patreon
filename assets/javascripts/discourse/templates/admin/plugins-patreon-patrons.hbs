@@ -1,0 +1,19 @@
+<section id="patrons">
+  {{#conditional-loading-spinner condition=refreshing}}
+    {{#if model}}
+      <table class='table patrons-list'>
+        <thead>
+        </thead>
+        <tbody>
+          {{#each model as |patron|}}
+            <tr class="user">
+              <td>{{patron.id}}</td>
+              <td>{{patron.email}}</td>
+              <td>{{patron.user_id}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    {{/if}}
+  {{/conditional-loading-spinner}}
+</section>

@@ -23,6 +23,11 @@ class ::Patreon::PatreonAdminController < Admin::AdminController
     render json: valid_filters
   end
 
+  def patrons
+    result = Patreon::Patron.all.map { |p| { id: p[0], email: p[1][:email] } }
+    render json: { patrons: result }
+  end
+
   def rewards
     rewards = PluginStore.get(PLUGIN_NAME, 'rewards')
 

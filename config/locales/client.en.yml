@@ -4,6 +4,7 @@ en:
       title: 'Patreon'
       header:
         rules: 'Filters'
+        patrons: 'Patrons'
       group: 'Group'
       rewards: 'Rewards'
       filter: 'Filter'
