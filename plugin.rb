@@ -217,7 +217,6 @@ end
 auth_provider pretty_name: 'Patreon',
               title: 'with Patreon',
               message: 'Authentication with Patreon (make sure pop up blockers are not enabled)',
-              frame_width: 840,
-              frame_height: 570,
               authenticator: Auth::PatreonAuthenticator.new('patreon', trusted: true),
-              enabled_setting: 'patreon_login_enabled'
+              enabled_setting: 'patreon_login_enabled',
+              full_screen_login: true
