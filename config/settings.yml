@@ -7,10 +7,13 @@ plugins:
     client: true
   patreon_client_id:
     default: ''
+    client: true
   patreon_client_secret:
     default: ''
+    client: true
   patreon_webhook_secret:
     default: ''
+    client: true
   patreon_creator_discourse_username:
     default: ''
     type: username
