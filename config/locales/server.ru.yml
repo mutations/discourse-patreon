@@ -8,15 +8,15 @@
 ru:
   site_settings:
     patreon_creator_enabled: 'Включить плагин discourse-patreon'
-    patreon_login_enabled: 'Включить Patreon Social Login'
-    patreon_client_id: 'Сгенерированный Patreon Client ID'
-    patreon_client_secret: 'Сгенерированный Patreon Client Secret'
-    patreon_webhook_secret: 'Сгенерированный Patreon Webhook Secret'
-    patreon_creator_discourse_username: "Имя пользователя учетной записи Discourse, которая используется для входа через учетную запись создателя Patreon с помощью 'Patreon Social Login'"
-    patreon_declined_pledges_grace_period_days: "Льготный период (в днях) до полного отказа от залога."
-    max_patreon_api_reqs_per_hr: "Максимальное количество запросов API Patreon в час"
-    max_patreon_api_reqs_per_day: "Максимальное количество запросов API Patreon в день"
-    patreon_verbose_log: 'включить подробное ведение журнала полезной нагрузки patreon'
+    patreon_creator_login_enabled: 'Включить Patreon Social Login'
+    patreon_creator_client_id: 'Сгенерированный Patreon Client ID'
+    patreon_creator_client_secret: 'Сгенерированный Patreon Client Secret'
+    patreon_creator_webhook_secret: 'Сгенерированный Patreon Webhook Secret'
+    patreon_creator_creator_discourse_username: "Имя пользователя учетной записи Discourse, которая используется для входа через учетную запись создателя Patreon с помощью 'Patreon Social Login'"
+    patreon_creator_declined_pledges_grace_period_days: "Льготный период (в днях) до полного отказа от залога."
+    patreon_creator_max_patreon_api_reqs_per_hr: "Максимальное количество запросов API Patreon в час"
+    patreon_creator_max_patreon_api_reqs_per_day: "Максимальное количество запросов API Patreon в день"
+    patreon_creator_verbose_log: 'включить подробное ведение журнала полезной нагрузки patreon'
   dashboard:
     patreon:
       access_token_invalid: "Недопустимые значения доступа и обновления токенов в Patreon Creator. Вы должны скопировать и вставить новые токены с <a href='https://www.patreon.com/platform/documentation/clients'>Patreon сайта</a> из <a href='%{base_path}/admin/site_settings/category/all_results?filter=patreon'>настройки сайта</a>."

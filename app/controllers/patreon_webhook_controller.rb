@@ -14,7 +14,7 @@ class ::Patreon::PatreonWebhookController < ApplicationController
 
     pledge_data = JSON.parse(request.body.read)
 
-    if SiteSetting.patreon_verbose_log
+    if SiteSetting.patreon_creator_verbose_log
       Rails.logger.warn("Patreon verbose log for Webhook:\n #{pledge_data.inspect}")
     end
 
@@ -46,6 +46,6 @@ class ::Patreon::PatreonWebhookController < ApplicationController
     signature = request.headers['X-Patreon-Signature']
     digest = OpenSSL::Digest::MD5.new
 
-    signature == OpenSSL::HMAC.hexdigest(digest, SiteSetting.patreon_webhook_secret, request.raw_post)
+    signature == OpenSSL::HMAC.hexdigest(digest, SiteSetting.patreon_creator_webhook_secret, request.raw_post)
   end
 end

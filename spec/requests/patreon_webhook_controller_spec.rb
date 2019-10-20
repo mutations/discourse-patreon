@@ -35,7 +35,7 @@ RSpec.describe ::Patreon::PatreonWebhookController do
 
       let(:body) { get_patreon_response('pledge.json') }
       let(:digest) { OpenSSL::Digest::MD5.new }
-      let(:secret) { SiteSetting.patreon_webhook_secret = "WEBHOOK SECRET" }
+      let(:secret) { SiteSetting.patreon_creator_webhook_secret = "WEBHOOK SECRET" }
 
       before do
         Patreon.set("rewards",

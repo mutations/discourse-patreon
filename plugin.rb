@@ -198,10 +198,10 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
     omniauth.provider :patreon,
                       setup: lambda { |env|
                         strategy = env['omniauth.strategy']
-                        strategy.options[:client_id] = SiteSetting.patreon_client_id
-                        strategy.options[:client_secret] = SiteSetting.patreon_client_secret
+                        strategy.options[:client_id] = SiteSetting.patreon_creator_client_id
+                        strategy.options[:client_secret] = SiteSetting.patreon_creator_client_secret
                         strategy.options[:redirect_uri] = "#{Discourse.base_url}/auth/patreon/callback"
-                        strategy.options[:provider_ignores_state] = SiteSetting.patreon_login_ignore_state
+                        strategy.options[:provider_ignores_state] = SiteSetting.patreon_creator_login_ignore_state
                       }
   end
 
@@ -218,10 +218,10 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
     Rails.logger.info("auth_token[:extra][:raw_info][:campaign].inspect: #{inspect_data[:campaign].inspect}") if inspect_data[:campaign]
 
     user = result.user
-    discourse_username = SiteSetting.patreon_creator_discourse_username
+    discourse_username = SiteSetting.patreon_creator_creator_discourse_username
     if discourse_username.present? && user && user.username == discourse_username
-      SiteSetting.patreon_creator_access_token = auth_token[:info][:access_token]
-      SiteSetting.patreon_creator_refresh_token = auth_token[:info][:refresh_token]
+      SiteSetting.patreon_creator_creator_access_token = auth_token[:info][:access_token]
+      SiteSetting.patreon_creator_creator_refresh_token = auth_token[:info][:refresh_token]
     end
 
     if auth_token[:extra][:raw_info][:campaign].empty?
@@ -233,7 +233,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
   end
 
   def enabled?
-    SiteSetting.patreon_login_enabled
+    SiteSetting.patreon_creator_login_enabled
   end
 end
 
@@ -243,4 +243,4 @@ auth_provider pretty_name: 'Patreon',
               frame_width: 840,
               frame_height: 570,
               authenticator: Auth::PatreonAuthenticator.new('patreon', trusted: true),
-              enabled_setting: 'patreon_login_enabled'
+              enabled_setting: 'patreon_creator_login_enabled'

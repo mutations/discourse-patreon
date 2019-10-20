@@ -8,17 +8,17 @@
 fr:
   site_settings:
     patreon_creator_enabled: 'Activer le plugin discourse-patreon'
-    patreon_login_enabled: 'Activer le Patreon Social Login'
-    patreon_client_id: 'Client ID généré par Patreon'
-    patreon_client_secret: 'Client Secret généré par Patreon'
-    patreon_webhook_secret: 'Webhook Secret généré par Patreon'
-    patreon_creator_discourse_username: "Nom d'utilisateur du compte Discourse qui est uitlisé pour se connecter à travers le compte créateur Patreon en utilisant 'Patreon Social Login'"
-    patreon_creator_access_token: "Creator's Acces Token généré par Patreon"
-    patreon_creator_refresh_token: "Creator's Refresh Token généré par Patreon"
-    patreon_declined_pledges_grace_period_days: "Période de grâce (en jours) avant qu'un engagement est entièrement refusé"
-    max_patreon_api_reqs_per_hr: "Nombre maximum de requêtes Patreon API par heure"
-    max_patreon_api_reqs_per_day: "Nombre maximum de requêtes Patreon API par jour"
-    patreon_verbose_log: 'activer la journalisation étendue de payload de patreon'
+    patreon_creator_login_enabled: 'Activer le Patreon Social Login'
+    patreon_creator_client_id: 'Client ID généré par Patreon'
+    patreon_creator_client_secret: 'Client Secret généré par Patreon'
+    patreon_creator_webhook_secret: 'Webhook Secret généré par Patreon'
+    patreon_creator_creator_discourse_username: "Nom d'utilisateur du compte Discourse qui est uitlisé pour se connecter à travers le compte créateur Patreon en utilisant 'Patreon Social Login'"
+    patreon_creator_creator_access_token: "Creator's Acces Token généré par Patreon"
+    patreon_creator_creator_refresh_token: "Creator's Refresh Token généré par Patreon"
+    patreon_creator_declined_pledges_grace_period_days: "Période de grâce (en jours) avant qu'un engagement est entièrement refusé"
+    patreon_creator_max_patreon_api_reqs_per_hr: "Nombre maximum de requêtes Patreon API par heure"
+    patreon_creator_max_patreon_api_reqs_per_day: "Nombre maximum de requêtes Patreon API par jour"
+    patreon_creator_verbose_log: 'activer la journalisation étendue de payload de patreon'
   dashboard:
     patreon:
       access_token_invalid: "L'accès et le rafraîchissement des valeurs des jetons de Patreon Creator sont incorrects. Il faut copier-coller de nouveaux jetons depuis le <a href='https://www.patreon.com/platform/documentation/clients'>site web de Patreon</a> vers les <a href='%{base_path}/admin/site_settings/category/all_results?filter=patreon'>paramètres du site</a>."

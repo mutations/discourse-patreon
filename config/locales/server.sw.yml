@@ -8,8 +8,8 @@
 sw:
   site_settings:
     patreon_creator_enabled: 'Ruhusu plugin ya discourse-patreon '
-    patreon_login_enabled: 'Ruhusu watu kuingia kupitia Patreon'
-    patreon_client_id: 'Utambulisho wa Mteja wa Patreon Uliotengenezwa'
-    patreon_creator_discourse_username: "Jina la mtumiaji kutoka kwenye Akaunti ya Discourse ambalo limetumika kutengeneza akaunti ya Patreon kupitia 'Patreon Social Login'"
-    patreon_declined_pledges_grace_period_days: "Mda fulani (siku) kabla ya ombi kukataliwa kabisa."
-    max_patreon_api_reqs_per_day: "Kiwango cha juu cha maombi kwa Patreon API kwa siku"
+    patreon_creator_login_enabled: 'Ruhusu watu kuingia kupitia Patreon'
+    patreon_creator_client_id: 'Utambulisho wa Mteja wa Patreon Uliotengenezwa'
+    patreon_creator_creator_discourse_username: "Jina la mtumiaji kutoka kwenye Akaunti ya Discourse ambalo limetumika kutengeneza akaunti ya Patreon kupitia 'Patreon Social Login'"
+    patreon_creator_declined_pledges_grace_period_days: "Mda fulani (siku) kabla ya ombi kukataliwa kabisa."
+    patreon_creator_max_patreon_api_reqs_per_day: "Kiwango cha juu cha maombi kwa Patreon API kwa siku"

@@ -20,7 +20,7 @@ module ::Patreon
       local_users = get_local_users
       reward_users = Patreon::RewardUser.all
       declined_users = Patreon::Pledge::Decline.all
-      declined_pledges_grace_period_days = SiteSetting.patreon_declined_pledges_grace_period_days
+      declined_pledges_grace_period_days = SiteSetting.patreon_creator_declined_pledges_grace_period_days
 
       filters.each_pair do |group_id, rewards|
         group = Group.find_by(id: group_id)

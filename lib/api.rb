@@ -16,8 +16,8 @@ module ::Patreon
     end
 
     def self.get(uri)
-      limiter_hr = RateLimiter.new(nil, "patreon_api_hr", SiteSetting.max_patreon_api_reqs_per_hr, 1.hour)
-      limiter_day = RateLimiter.new(nil, "patreon_api_day", SiteSetting.max_patreon_api_reqs_per_day, 1.day)
+      limiter_hr = RateLimiter.new(nil, "patreon_api_hr", SiteSetting.patreon_creator_max_patreon_api_reqs_per_hr, 1.hour)
+      limiter_day = RateLimiter.new(nil, "patreon_api_day", SiteSetting.patreon_creator_max_patreon_api_reqs_per_day, 1.day)
       AdminDashboardData.clear_problem_message(ACCESS_TOKEN_INVALID) if AdminDashboardData.problem_message_check(ACCESS_TOKEN_INVALID)
 
       unless limiter_hr.can_perform?
@@ -30,7 +30,7 @@ module ::Patreon
 
       response = Faraday.new(
         url: 'https://api.patreon.com',
-        headers: { 'Authorization' => "Bearer #{SiteSetting.patreon_creator_access_token}" }
+        headers: { 'Authorization' => "Bearer #{SiteSetting.patreon_creator_creator_access_token}" }
       ).get(uri)
 
       limiter_hr.performed!

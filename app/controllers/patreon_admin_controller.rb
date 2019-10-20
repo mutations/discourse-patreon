@@ -76,7 +76,7 @@ class ::Patreon::PatreonAdminController < Admin::AdminController
   end
 
   def patreon_tokens_present?
-    raise Discourse::SiteSettingMissing.new("patreon_creator_access_token") if SiteSetting.patreon_creator_access_token.blank?
-    raise Discourse::SiteSettingMissing.new("patreon_creator_refresh_token")  if SiteSetting.patreon_creator_refresh_token.blank?
+    raise Discourse::SiteSettingMissing.new("patreon_creator_creator_access_token") if SiteSetting.patreon_creator_creator_access_token.blank?
+    raise Discourse::SiteSettingMissing.new("patreon_creator_creator_refresh_token")  if SiteSetting.patreon_creator_creator_refresh_token.blank?
   end
 end
