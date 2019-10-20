@@ -16,7 +16,7 @@ RSpec.describe ::Patreon::Campaign do
 
     stub_request(:get, campaigns_url).to_return(campaigns)
     stub_request(:get, pledges_url).to_return(pledges)
-    SiteSetting.patreon_enabled = true
+    SiteSetting.patreon_creator_enabled = true
     SiteSetting.patreon_declined_pledges_grace_period_days = 7
   end
 

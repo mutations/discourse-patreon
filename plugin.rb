@@ -9,7 +9,7 @@
 require 'auth/oauth2_authenticator'
 require 'omniauth-oauth2'
 
-enabled_site_setting :patreon_enabled
+enabled_site_setting :patreon_creator_enabled
 
 PLUGIN_NAME = 'discourse-patreon-creator'.freeze
 
@@ -158,7 +158,7 @@ after_initialize do
   end
 
   DiscourseEvent.on(:user_created) do |user|
-    if SiteSetting.patreon_enabled
+    if SiteSetting.patreon_creator_enabled
       filters = PluginStore.get(PLUGIN_NAME, 'filters')
       patreon_id = Patreon::Patron.all.key(user.email)
 

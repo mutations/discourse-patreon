@@ -11,6 +11,6 @@ export default {
   },
 
   shouldRender(args, component) {
-    return component.siteSettings.patreon_enabled && args.model.patreon_id;
+    return component.siteSettings.patreon_creator_enabled && args.model.patreon_id;
   }
 };

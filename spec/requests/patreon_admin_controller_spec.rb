@@ -13,7 +13,7 @@ describe Patreon::PatreonAdminController do
 
     before do
       sign_in(admin)
-      SiteSetting.patreon_enabled = true
+      SiteSetting.patreon_creator_enabled = true
       SiteSetting.patreon_creator_access_token = "TOKEN"
       SiteSetting.patreon_creator_refresh_token = "TOKEN"
       Patreon.set("filters", filters)

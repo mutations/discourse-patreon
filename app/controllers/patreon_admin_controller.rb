@@ -8,11 +8,11 @@ class ::Patreon::PatreonAdminController < Admin::AdminController
 
   requires_plugin PLUGIN_NAME
 
-  before_action :patreon_enabled?
+  before_action :patreon_creator_enabled?
   before_action :patreon_tokens_present?
 
-  def patreon_enabled?
-    raise Discourse::NotFound unless SiteSetting.patreon_enabled
+  def patreon_creator_enabled?
+    raise Discourse::NotFound unless SiteSetting.patreon_creator_enabled
   end
 
   def list
