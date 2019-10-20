@@ -7,7 +7,7 @@
 
 ur:
   site_settings:
-    patreon_enabled: 'ڈسکورس-پَیٹریئون پلگ اِن کو فعال کریں'
+    patreon_creator_enabled: 'ڈسکورس-پَیٹریئون پلگ اِن کو فعال کریں'
     patreon_login_enabled: 'پَیٹریئون سوشل لاگ اِن کو فعال کریں'
     patreon_client_id: 'پَیٹریئون کلائنٹ ID تیار کرلی گئی'
     patreon_client_secret: 'پَیٹریئون کلائنٹ سیکرٹ تیار کرلیا گیا'

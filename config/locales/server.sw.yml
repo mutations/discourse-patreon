@@ -7,7 +7,7 @@
 
 sw:
   site_settings:
-    patreon_enabled: 'Ruhusu plugin ya discourse-patreon '
+    patreon_creator_enabled: 'Ruhusu plugin ya discourse-patreon '
     patreon_login_enabled: 'Ruhusu watu kuingia kupitia Patreon'
     patreon_client_id: 'Utambulisho wa Mteja wa Patreon Uliotengenezwa'
     patreon_creator_discourse_username: "Jina la mtumiaji kutoka kwenye Akaunti ya Discourse ambalo limetumika kutengeneza akaunti ya Patreon kupitia 'Patreon Social Login'"

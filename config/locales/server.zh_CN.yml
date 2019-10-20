@@ -7,7 +7,7 @@
 
 zh_CN:
   site_settings:
-    patreon_enabled: '启用 discourse-patreon 插件'
+    patreon_creator_enabled: '启用 discourse-patreon 插件'
     patreon_login_enabled: '启用 Patreon 登录'
     patreon_client_id: '生成的Patreon客户端ID'
     patreon_client_secret: '生成的Patreon客户端密钥'

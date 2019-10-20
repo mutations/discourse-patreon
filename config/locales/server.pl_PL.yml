@@ -7,7 +7,7 @@
 
 pl_PL:
   site_settings:
-    patreon_enabled: 'Włącz wtyczkę discourse‐patreon'
+    patreon_creator_enabled: 'Włącz wtyczkę discourse‐patreon'
     patreon_login_enabled: 'Włącz logowanie za pomocą Patreona'
     patreon_client_id: 'Wygenerowane Client ID Patreona'
     patreon_client_secret: 'Wygenerowany Patreon Client Secret'

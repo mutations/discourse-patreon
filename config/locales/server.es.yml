@@ -7,7 +7,7 @@
 
 es:
   site_settings:
-    patreon_enabled: 'Habilitar el plugin discourse-patreon'
+    patreon_creator_enabled: 'Habilitar el plugin discourse-patreon'
     patreon_login_enabled: 'Habilitar Patreon Social Login'
     patreon_client_id: 'Patreon Client ID generado'
     patreon_client_secret: 'Patreon Client Secret generado'

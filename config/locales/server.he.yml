@@ -7,7 +7,7 @@
 
 he:
   site_settings:
-    patreon_enabled: 'הפעלת התוסף discourse-patreon'
+    patreon_creator_enabled: 'הפעלת התוסף discourse-patreon'
     patreon_login_enabled: 'הפעלת כניסה ל־Patreon דרך רשת חברתית'
     patreon_client_id: 'נוצר מזהה לקוח Patreon'
     patreon_client_secret: 'נוצר סוד לקוח Patreon'

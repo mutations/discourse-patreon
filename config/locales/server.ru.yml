@@ -7,7 +7,7 @@
 
 ru:
   site_settings:
-    patreon_enabled: 'Включить плагин discourse-patreon'
+    patreon_creator_enabled: 'Включить плагин discourse-patreon'
     patreon_login_enabled: 'Включить Patreon Social Login'
     patreon_client_id: 'Сгенерированный Patreon Client ID'
     patreon_client_secret: 'Сгенерированный Patreon Client Secret'

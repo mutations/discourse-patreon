@@ -1,5 +1,5 @@
 plugins:
-  patreon_enabled:
+  patreon_creator_enabled:
     default: false
     client: true
   patreon_login_enabled:

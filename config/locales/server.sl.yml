@@ -7,4 +7,4 @@
 
 sl:
   site_settings:
-    patreon_enabled: 'Vključi discourse-patreon vtičnik'
+    patreon_creator_enabled: 'Vključi discourse-patreon vtičnik'

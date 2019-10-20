@@ -7,7 +7,7 @@
 
 pt_BR:
   site_settings:
-    patreon_enabled: 'Habilitar o plugin discourse-patreon'
+    patreon_creator_enabled: 'Habilitar o plugin discourse-patreon'
     patreon_login_enabled: 'Habilitar Login Social do Patreon'
     patreon_client_id: 'ID do Cliente Patreon Gerado'
     patreon_client_secret: 'Segredo do Cliente Patreon Gerado'

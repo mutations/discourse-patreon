@@ -7,7 +7,7 @@
 
 fi:
   site_settings:
-    patreon_enabled: 'Ota discourse-patreon -lisäosa käyttöön'
+    patreon_creator_enabled: 'Ota discourse-patreon -lisäosa käyttöön'
     patreon_login_enabled: 'Ota käyttöön sosiaalinen kirjautuminen Patreonilla'
     patreon_client_id: 'Muodostettu Patreon asiakas-ID (engl. client ID)'
     patreon_client_secret: 'Muodostettu Patreon asiakassalausavain (engl. Client secret)'

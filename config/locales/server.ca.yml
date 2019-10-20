@@ -7,7 +7,7 @@
 
 ca:
   site_settings:
-    patreon_enabled: 'Habilita el connector Discourse-Patreon'
+    patreon_creator_enabled: 'Habilita el connector Discourse-Patreon'
     patreon_login_enabled: 'Habilita la connexió social de Patreon'
     patreon_client_id: 'ID generat de client Patreon '
     patreon_client_secret: 'Secret de client generat de Patreon'

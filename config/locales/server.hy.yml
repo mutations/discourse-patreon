@@ -7,7 +7,7 @@
 
 hy:
   site_settings:
-    patreon_enabled: 'Միացնել discourse-patreon պլագինը'
+    patreon_creator_enabled: 'Միացնել discourse-patreon պլագինը'
     patreon_login_enabled: 'Միացնել Patreon Սոցիալակա կայքով Մուտքը'
     patreon_client_id: 'Գեներացված Patreon Հաճախորդի ID'
     patreon_client_secret: 'Գեներացված Patreon Հաճախորդի Գաղտնիք'
