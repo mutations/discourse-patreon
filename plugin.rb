@@ -2,7 +2,7 @@
 
 # name: discourse-patreon-creator
 # about: Integration features between Patreon and Discourse for Creators
-# version: 2.0
+# version: 1.0
 # author: Dan Bosan from Mutations Limited <dan@mutations.ltd>
 # url: https://github.com/discourse/discourse-patreon-creator
 
