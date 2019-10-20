@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-# name: discourse-patreon
-# about: Integration features between Patreon and Discourse
+# name: discourse-patreon-creator
+# about: Integration features between Patreon and Discourse for Creators
 # version: 2.0
-# author: Rafael dos Santos Silva <xfalcox@gmail.com>
-# url: https://github.com/discourse/discourse-patreon
+# author: Dan Bosan from Mutations Limited <dan@mutations.ltd>
+# url: https://github.com/discourse/discourse-patreon-creator
 
 require 'auth/oauth2_authenticator'
 require 'omniauth-oauth2'
 
 enabled_site_setting :patreon_enabled
 
-PLUGIN_NAME = 'discourse-patreon'.freeze
+PLUGIN_NAME = 'discourse-patreon-creator'.freeze
 
 register_asset 'stylesheets/patreon.scss'
 
@@ -22,7 +22,7 @@ after_initialize do
   require_dependency 'admin_constraint'
 
   module ::Patreon
-    PLUGIN_NAME = 'discourse-patreon'.freeze
+    PLUGIN_NAME = 'discourse-patreon-creator'.freeze
     USER_DETAIL_FIELDS = ["id", "email", "amount_cents", "rewards", "declined_since"].freeze
 
     class Engine < ::Rails::Engine
@@ -31,7 +31,7 @@ after_initialize do
     end
 
     def self.default_image_url
-      "#{Discourse.base_url}/plugins/discourse-patreon/images/patreon-logomark-color-on-white.png"
+      "#{Discourse.base_url}/plugins/discourse-patreon-creator/images/patreon-logomark-color-on-white.png"
     end
 
     def self.store

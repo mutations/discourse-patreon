@@ -1,5 +1,5 @@
 import { default as computed } from "ember-addons/ember-computed-decorators";
-import FilterRule from "discourse/plugins/discourse-patreon/discourse/models/filter-rule";
+import FilterRule from "discourse/plugins/discourse-patreon-creator/discourse/models/filter-rule";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 
@@ -84,7 +84,7 @@ export default Ember.Controller.extend({
         this.set("updatingData", false);
 
         bootbox.alert(I18n.t("patreon.refresh_page"), () => {
-          window.location.pathname = Discourse.getURL("/admin/plugins/patreon");
+          window.location.pathname = Discourse.getURL("/admin/plugins/patreon-creator");
         });
       });
     }

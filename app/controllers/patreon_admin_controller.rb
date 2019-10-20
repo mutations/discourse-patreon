@@ -4,7 +4,7 @@ require_dependency 'application_controller'
 
 class ::Patreon::PatreonAdminController < Admin::AdminController
 
-  PLUGIN_NAME = 'discourse-patreon'.freeze
+  PLUGIN_NAME = 'discourse-patreon-creator'.freeze
 
   requires_plugin PLUGIN_NAME
 
