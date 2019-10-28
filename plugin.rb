@@ -138,6 +138,7 @@ after_initialize do
     end
 
     def raw_info
+      Rails.logger.info("access_token.token: #{access_token.token}")
       @raw_info ||= begin
         campaign_response = begin
           client.request(:get, "https://api.patreon.com/oauth2/api/current_user/campaigns", headers: {
