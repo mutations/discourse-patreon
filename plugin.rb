@@ -144,22 +144,6 @@ after_initialize do
             'Authorization' => "Bearer #{access_token.token}"
         }, parse: :json)
 
-        response_parsed = response.parsed
-        Rails.logger.info("response_parsed.keys: #{response_parsed.keys}")
-        Rails.logger.info("response_parsed.keys: #{response_parsed.to_yaml}")
-        Rails.logger.info("response_parsed[:links].keys: #{response_parsed["links"].keys}")
-        Rails.logger.info("response_parsed[:links][:self]: #{response_parsed["links"]["self"]}")
-
-        self_response = begin
-          client.request(:get, "https://www.patreon.com/api/oauth2/v2/campaigns", headers: {
-              'Authorization' => "Bearer #{access_token.token}"
-          }, parse: :json).parsed
-        rescue => e
-          Rails.logger.warn("Error while getting campaign info with error: #{e}.\n\n #{e.backtrace.join("\n")}")
-          {}
-        end
-        Rails.logger.info("self_response: #{self_response.inspect}")
-
         campaign_response = begin
           client.request(:get, "https://api.patreon.com/oauth2/api/current_user/campaigns", headers: {
               'Authorization' => "Bearer #{access_token.token}"
