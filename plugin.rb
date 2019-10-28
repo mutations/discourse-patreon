@@ -151,7 +151,7 @@ after_initialize do
         Rails.logger.info("response_parsed[:links][:self]: #{response_parsed["links"]["self"]}")
 
         self_response = begin
-          client.request(:get, response_parsed["links"]["self"], headers: {
+          client.request(:get, "https://www.patreon.com/api/oauth2/v2/campaigns", headers: {
               'Authorization' => "Bearer #{access_token.token}"
           }, parse: :json).parsed
         rescue => e
