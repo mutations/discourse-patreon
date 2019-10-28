@@ -16,8 +16,7 @@ class ::Patreon::PatreonAdminController < Admin::AdminController
   end
 
   def list
-    filters = PluginStore.get(PLUGIN_NAME, 'filters') || {}
-    rewards = ::Patreon::Reward.all
+    filters = PluginStore.get(PLUGIN_NAME, 'nswf_group') || {}
     last_sync = ::Patreon.get("last_sync") || {}
 
     groups = ::Group.all.pluck(:id)

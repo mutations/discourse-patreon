@@ -99,7 +99,6 @@ after_initialize do
 
   Discourse::Application.routes.append do
     get '/admin/plugins/patreon' => 'admin/plugins#index', constraints: AdminConstraint.new
-    get '/admin/plugins/patreon/list' => 'patreon_admin#list', constraints: AdminConstraint.new
   end
 
   class ::OmniAuth::Strategies::Patreon
