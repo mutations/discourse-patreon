@@ -144,7 +144,10 @@ after_initialize do
             'Authorization' => "Bearer #{access_token.token}"
         }, parse: :json)
 
-        Rails.logger.info("response.parsed[:links][:self]: #{response.parsed[:links][:self]}")
+        response_parsed = response.parsed
+        Rails.logger.info("response_parsed.keys: #{response_parsed.keys}")
+        Rails.logger.info("response_parsed.keys: #{response_parsed.to_yaml}")
+
         self_response = begin
           client.request(:get, response.parsed[:links][:self], headers: {
               'Authorization' => "Bearer #{access_token.token}"
