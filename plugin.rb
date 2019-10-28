@@ -228,6 +228,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       result.failed_reason = "You need to be a Creator to use this forum."
     else
       Rails.logger.info("auth_token[:extra][:raw_info][:campaign][:data]: #{auth_token[:extra][:raw_info][:campaign][:data].inspect}")
+      Rails.logger.info("auth_token[:extra][:raw_info][:campaign][:data] keys: #{auth_token[:extra][:raw_info][:campaign][:data].keys}")
       Rails.logger.info("auth_token[:extra][:raw_info][:campaign][:data][:attributes]: #{auth_token[:extra][:raw_info][:campaign][:data][:attributes].inspect}")
       Rails.logger.info("auth_token[:extra][:raw_info][:campaign][:data]: #{auth_token[:extra][:raw_info][:campaign][:data].to_yaml}")
 
