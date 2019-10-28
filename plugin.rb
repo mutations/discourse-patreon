@@ -228,15 +228,9 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       result.failed_reason = "You need to be a Creator to use this forum."
     end
 
-    Rails.logger.info("auth_token[:extra][:raw_info][:campaign].keys: #{auth_token[:extra][:raw_info][:campaign].keys}")
-    Rails.logger.info("auth_token[:extra][:raw_info][:campaign].to_yaml: #{auth_token[:extra][:raw_info][:campaign].to_yaml}")
-    auth_token[:extra][:raw_info][:campaign].keys.each do |key|
-      Rails.logger.info("auth_token[:extra][:raw_info][:campaign][:#{key.to_s}]: #{auth_token[:extra][:raw_info][:campaign][key]}")
-    end
-
     nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
     if nsfw_group
-      can_see_nsfw = auth_token[:extra][:raw_info][:campaign][:data][:is_nsfw]
+      can_see_nsfw = auth_token[:extra][:raw_info][:campaign][:data][:attributes][:is_nsfw]
       can_see_nsfw ? nsfw_group.add(user) : nsfw_group.remove(user)
     end
 
