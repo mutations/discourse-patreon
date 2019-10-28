@@ -144,7 +144,17 @@ after_initialize do
             'Authorization' => "Bearer #{access_token.token}"
         }, parse: :json)
 
-        Rails.logger.info("response.parsed: #{response.parsed.to_yaml}")
+        Rails.logger.info("response.parsed[:links][:self]: #{response.parsed[:links][:self]}")
+        self_response = begin
+          client.request(:get, response.parsed[:links][:self], headers: {
+              'Authorization' => "Bearer #{access_token.token}"
+          }, parse: :json).parsed
+        rescue => e
+          Rails.logger.warn("Error while getting campaign info with error: #{e}.\n\n #{e.backtrace.join("\n")}")
+          {}
+        end
+        Rails.logger.info("self_response.parsed: #{self_response.parsed.to_yaml}")
+
         campaign_response = begin
           client.request(:get, "https://api.patreon.com/oauth2/api/current_user/campaigns", headers: {
               'Authorization' => "Bearer #{access_token.token}"
