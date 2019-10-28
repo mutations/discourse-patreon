@@ -229,10 +229,9 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
     end
 
     nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
-    if auth_token[:extra][:raw_info][:data][:attributes][:can_see_nsfw]
-      nsfw_group.add(user)
-    else
-      nsfw_group.remove(user)
+    if nsfw_group
+      can_see_nsfw = auth_token[:extra][:raw_info][:data][:attributes][:can_see_nsfw]
+      can_see_nsfw ? nsfw_group.add(user) : nsfw_group.remove(user)
     end
 
     result
