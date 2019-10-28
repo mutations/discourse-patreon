@@ -147,11 +147,11 @@ after_initialize do
         response_parsed = response.parsed
         Rails.logger.info("response_parsed.keys: #{response_parsed.keys}")
         Rails.logger.info("response_parsed.keys: #{response_parsed.to_yaml}")
-        Rails.logger.info("response_parsed[:links]: #{response_parsed[:links].to_yaml}")
-        Rails.logger.info("response_parsed[:links][:self]: #{response_parsed[:links][:self].to_yaml}")
+        Rails.logger.info("response_parsed[:links].keys: #{response_parsed["links"].keys}")
+        Rails.logger.info("response_parsed[:links][:self]: #{response_parsed["links"]["self"]}")
 
         self_response = begin
-          client.request(:get, response_parsed[:links][:self], headers: {
+          client.request(:get, response_parsed["links"]["self"], headers: {
               'Authorization' => "Bearer #{access_token.token}"
           }, parse: :json).parsed
         rescue => e
