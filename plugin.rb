@@ -140,6 +140,11 @@ after_initialize do
     def raw_info
       Rails.logger.info("access_token.token: #{access_token.token}")
       @raw_info ||= begin
+        response = client.request(:get, "https://api.patreon.com/oauth2/api/current_user", headers: {
+            'Authorization' => "Bearer #{access_token.token}"
+        }, parse: :json)
+
+        Rails.logger.info("response.parsed: #{response.parsed.to_yaml}")
         campaign_response = begin
           client.request(:get, "https://api.patreon.com/oauth2/api/current_user/campaigns", headers: {
               'Authorization' => "Bearer #{access_token.token}"
@@ -149,9 +154,6 @@ after_initialize do
           {}
         end
 
-        response = client.request(:get, "https://api.patreon.com/oauth2/api/current_user", headers: {
-            'Authorization' => "Bearer #{access_token.token}"
-        }, parse: :json)
         response.parsed.merge({ campaign: campaign_response })
       end
     end
