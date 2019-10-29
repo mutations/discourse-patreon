@@ -163,14 +163,14 @@ after_initialize do
     Rails.logger.info("** session[:authentication]: #{session[:authentication].to_yaml}")
     if SiteSetting.patreon_creator_enabled
       begin
-        campaigns = ::Patreon::Api.campaign_data
-        Rails.logger.info("** campaigns: #{campaigns.to_yaml}")
-
         nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
+
+        user_info = Patreon.get("user_info") || {}
+        user_record = user_info[user.email] || {}
+        has_nsfw_campaign = user_record[:has_nsfw_campaign]
+        Rails.logger.info("** has_nsfw_campaign: #{has_nsfw_campaign}")
+
         if nsfw_group && user
-          has_nsfw_campaign = campaigns['data'].any? do |campaign|
-            campaign[:attributes][:is_nsfw]
-          end
           has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
         end
       rescue => e
@@ -223,6 +223,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       SiteSetting.patreon_creator_creator_refresh_token = auth_token[:info][:refresh_token]
     end
 
+    Rails.logger.info("**|| auth_token[:extra][:raw_info][:campaign]: #{auth_token[:extra][:raw_info][:campaign].inspect}")
     if auth_token[:extra][:raw_info][:campaign].empty?
       result.failed = true
       result.failed_reason = "You need to be a Creator to use this forum."
@@ -231,10 +232,18 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       Rails.logger.info("** is user nil?: #{user.nil?}")
       Rails.logger.info("** user: #{user.inspect}")
       nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
+      has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
+        campaign[:attributes][:is_nsfw]
+      end
+
+      # Save if this user has a NSFW campaign or not
+      # It is used above in the user_created callback
+      user_info = Patreon.get("user_info") || {}
+      user_record = user_info[result.email] || {}
+      user_record[:has_nsfw_campaign] = has_nsfw_campaign
+      Patreon.set("user_info", user_record)
+
       if nsfw_group && user
-        has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
-          campaign[:attributes][:is_nsfw]
-        end
         has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
       end
     end
