@@ -160,6 +160,7 @@ after_initialize do
 
   DiscourseEvent.on(:user_created) do |user|
     Rails.logger.info("** Entered DiscourseEvent.on(:user_created)")
+    Rails.logger.info("** session[:authentication]: #{session[:authentication].to_yaml}")
     if SiteSetting.patreon_creator_enabled
       begin
         campaigns = ::Patreon::Api.campaign_data
