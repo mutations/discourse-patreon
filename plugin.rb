@@ -152,6 +152,7 @@ after_initialize do
           {}
         end
 
+        Rails.logger.info("** ** campaign_response: #{campaign_response.to_yaml}")
         response.parsed.merge({ campaign: campaign_response })
       end
     end
