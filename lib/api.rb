@@ -12,7 +12,7 @@ module ::Patreon
     INVALID_RESPONSE = "patreon.error.invalid_response".freeze
 
     def self.campaign_data
-      get('/oauth2/api/current_user/campaigns?include=rewards,creator,goals,pledges&page[count]=100')
+      get('/oauth2/api/current_user/campaigns')
     end
 
     def self.get(uri)
