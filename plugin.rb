@@ -158,8 +158,10 @@ after_initialize do
   end
 
   DiscourseEvent.on(:user_created) do |user|
+    Rails.logger.info("** Entered DiscourseEvent.on(:user_created)")
     if SiteSetting.patreon_creator_enabled
       patreon_id = Patreon::Patron.all.key(user.email)
+      Rails.logger.info("** patreon_id: #{patreon_id}")
 
       if patreon_id.present?
         begin
