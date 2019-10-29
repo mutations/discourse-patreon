@@ -160,26 +160,19 @@ after_initialize do
   DiscourseEvent.on(:user_created) do |user|
     Rails.logger.info("** Entered DiscourseEvent.on(:user_created)")
     if SiteSetting.patreon_creator_enabled
-      patreon_id = Patreon::Patron.all.key(user.email)
-      Rails.logger.info("** patreon_id: #{patreon_id}")
+      begin
+        campaigns = ::Patreon::Api.campaign_data
+        Rails.logger.info("** campaigns: #{campaigns.to_yaml}")
 
-      if patreon_id.present?
-        begin
-          campaigns = ::Patreon::Api.campaign_data
-          Rails.logger.info("** campaigns: #{campaigns.to_yaml}")
-
-          nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
-          if nsfw_group && user
-            has_nsfw_campaign = campaigns['data'].any? do |campaign|
-              campaign[:attributes][:is_nsfw]
-            end
-            has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
+        nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
+        if nsfw_group && user
+          has_nsfw_campaign = campaigns['data'].any? do |campaign|
+            campaign[:attributes][:is_nsfw]
           end
-
-          Patreon::Patron.update_local_user(user, patreon_id, true)
-        rescue => e
-          Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
+          has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
         end
+      rescue => e
+        Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
       end
     end
   end
