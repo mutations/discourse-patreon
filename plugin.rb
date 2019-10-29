@@ -219,6 +219,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       result.failed = true
       result.failed_reason = "You need to be a Creator to use this forum."
     else
+      Rails.logger.info("** result: #{result.inspect}")
       Rails.logger.info("** is user nil?: #{user.nil?}")
       Rails.logger.info("** user: #{user.inspect}")
       nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
