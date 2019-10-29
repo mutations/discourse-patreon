@@ -223,7 +223,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       Rails.logger.info("** is user nil?: #{user.nil?}")
       Rails.logger.info("** user: #{user.inspect}")
       nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
-      if nsfw_group
+      if nsfw_group && user
         has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
           campaign[:attributes][:is_nsfw]
         end
