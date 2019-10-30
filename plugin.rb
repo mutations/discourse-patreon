@@ -178,6 +178,15 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
     if auth_token[:extra][:raw_info][:campaign][:data].empty?
       result.failed = true
       result.failed_reason = "You need to be a Creator to use this forum."
+    else
+      nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
+      has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
+        campaign[:attributes][:is_nsfw]
+      end
+
+      if nsfw_group && user
+        has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
+      end
     end
 
     result
