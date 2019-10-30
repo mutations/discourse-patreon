@@ -98,7 +98,21 @@ after_initialize do
         response = client.request(:get, "https://api.patreon.com/oauth2/api/current_user", headers: {
             'Authorization' => "Bearer #{access_token.token}"
         }, parse: :json)
-        response.parsed
+
+        campaign_response = begin
+          client.request(:get, "https://api.patreon.com/oauth2/api/current_user/campaigns", headers: {
+              'Authorization' => "Bearer #{access_token.token}"
+          }, parse: :json).parsed
+        rescue => e
+          Rails.logger.warn("Error while getting campaign info with error: #{e}.\n\n #{e.backtrace.join("\n")}")
+
+          # Return the data in the same format as the API call, just with no campaigns.
+          {
+            data: []
+          }
+        end
+
+        response.parsed.merge({ campaign: campaign_response })
       end
     end
   end
