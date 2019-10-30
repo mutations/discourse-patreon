@@ -149,7 +149,11 @@ after_initialize do
           }, parse: :json).parsed
         rescue => e
           Rails.logger.warn("Error while getting campaign info with error: #{e}.\n\n #{e.backtrace.join("\n")}")
-          {}
+
+          # We need to return an empty set here. Which is data: with empty array.
+          {
+            data: []
+          }
         end
 
         Rails.logger.info("** ** campaign_response: #{campaign_response.to_yaml}")
@@ -227,7 +231,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
     end
 
     Rails.logger.info("**|| auth_token[:extra][:raw_info][:campaign]: #{auth_token[:extra][:raw_info][:campaign].inspect}")
-    if auth_token[:extra][:raw_info][:campaign].empty?
+    if auth_token[:extra][:raw_info][:campaign][:data].empty?
       result.failed = true
       result.failed_reason = "You need to be a Creator to use this forum."
     else
