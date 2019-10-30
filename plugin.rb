@@ -165,6 +165,7 @@ after_initialize do
         nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
 
         user_info = Patreon.get("user_info") || {}
+        Rails.logger.info("** user_info: #{user_info.to_yaml}")
         user_record = user_info[user.email] || {}
         Rails.logger.info("** user_record: #{user_record.to_yaml}")
         has_nsfw_campaign = user_record[:has_nsfw_campaign]
@@ -245,7 +246,8 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       user_record[:has_nsfw_campaign] = has_nsfw_campaign
       user_record[:patreon_id] = result.extra_data[:uid]
       Rails.logger.info("** user_record: #{user_record.to_yaml}")
-      Patreon.set("user_info", user_record)
+      user_info[result.email] = user_record
+      Patreon.set("user_info", user_info)
 
       if nsfw_group && user
         has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
