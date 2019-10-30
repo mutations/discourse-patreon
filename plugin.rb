@@ -118,33 +118,22 @@ after_initialize do
   end
 
   DiscourseEvent.on(:user_created) do |user|
-    if SiteSetting.patreon_enabled
-      filters = PluginStore.get(PLUGIN_NAME, 'filters')
-      patreon_id = Patreon::Patron.all.key(user.email)
+    if SiteSetting.patreon_creator_enabled
+      begin
+        nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
 
-      if filters.present? && patreon_id.present?
-        begin
-          reward_id = Patreon::RewardUser.all.except('0').detect { |_k, v| v.include? patreon_id }&.first
+        user_info = Patreon.get("user_info") || {}
+        user_record = user_info[user.email] || {}
+        has_nsfw_campaign = user_record[:has_nsfw_campaign]
 
-          group_ids = filters.select { |_k, v| v.include?(reward_id) || v.include?('0') }.keys
-
-          Group.where(id: group_ids).each { |group| group.add user }
-
-          Patreon::Patron.update_local_user(user, patreon_id, true)
-        rescue => e
-          Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
+        if nsfw_group && user
+          has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
         end
+
+        Patreon::Patron.update_local_user(user, user_record[:patreon_id], true)
+      rescue => e
+        Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
       end
-    end
-  end
-
-  ::Patreon::USER_DETAIL_FIELDS.each do |attribute|
-    add_to_serializer(:admin_detailed_user, "patreon_#{attribute}".to_sym, false) do
-      ::Patreon::Patron.attr(attribute, object)
-    end
-
-    add_to_serializer(:admin_detailed_user, "include_patreon_#{attribute}?".to_sym) do
-      ::Patreon::Patron.attr(attribute, object).present?
     end
   end
 end
@@ -183,6 +172,15 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
         campaign[:attributes][:is_nsfw]
       end
+
+      # Store Patreon ID and NSFW campaign flag for the user
+      # It will be used in the DiscourseEvent.on(:user_created) callback
+      user_info = Patreon.get("user_info") || {}
+      user_record = user_info[result.email] || {}
+      user_record[:has_nsfw_campaign] = has_nsfw_campaign
+      user_record[:patreon_id] = result.extra_data[:uid]
+      user_info[result.email] = user_record
+      Patreon.set("user_info", user_info)
 
       if nsfw_group && user
         has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
