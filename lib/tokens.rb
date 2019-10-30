@@ -11,8 +11,8 @@ module ::Patreon
       response = conn.post('/oauth2/token',
         grant_type: 'refresh_token',
         refresh_token: SiteSetting.patreon_creator_refresh_token,
-        client_id: SiteSetting.patreon_client_id,
-        client_secret: SiteSetting.patreon_client_secret
+        client_id: SiteSetting.patreon_creator_client_id,
+        client_secret: SiteSetting.patreon_creator_client_secret
       )
 
       if response.status == 200

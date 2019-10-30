@@ -7,4 +7,4 @@
 
 lt:
   site_settings:
-    patreon_login_enabled: 'Įgalinti Patreon prisijungimą'
+    patreon_creator_login_enabled: 'Įgalinti Patreon prisijungimą'

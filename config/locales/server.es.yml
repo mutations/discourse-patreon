@@ -7,18 +7,16 @@
 
 es:
   site_settings:
-    patreon_enabled: 'Habilitar el plugin discourse-patreon'
-    patreon_login_enabled: 'Habilitar Patreon Social Login'
-    patreon_client_id: 'Patreon Client ID generado'
-    patreon_client_secret: 'Patreon Client Secret generado'
-    patreon_webhook_secret: 'Patreon Webhook Secret generado'
+    patreon_creator_enabled: 'Habilitar el plugin discourse-patreon'
+    patreon_creator_login_enabled: 'Habilitar Patreon Social Login'
+    patreon_creator_client_id: 'Patreon Client ID generado'
+    patreon_creator_client_secret: 'Patreon Client Secret generado'
     patreon_creator_discourse_username: "Nombre de usuario de la cuenta de Discourse que es usado para ingresar a través del creador de cuentas de Patreon usando 'Patreon Social Login'"
     patreon_creator_access_token: "Patreon Creator's Access Token generado"
     patreon_creator_refresh_token: "Patreon Creator's Refesh Token generado"
-    patreon_declined_pledges_grace_period_days: "Período de gracia (en días) antes de que una promesa sea rechazada por completo."
-    max_patreon_api_reqs_per_hr: "Número máximo de solicitudes al API de Patreon por hora"
-    max_patreon_api_reqs_per_day: "Número máximo de solicitudes al API de Patreon por día"
-    patreon_verbose_log: 'habilitar el registro detallado de la carga útil de Patreon'
+    patreon_creator_max_patreon_api_reqs_per_hr: "Número máximo de solicitudes al API de Patreon por hora"
+    patreon_creator_max_patreon_api_reqs_per_day: "Número máximo de solicitudes al API de Patreon por día"
+    patreon_creator_verbose_log: 'habilitar el registro detallado de la carga útil de Patreon'
   dashboard:
     patreon:
       access_token_invalid: "El token de acceso del creador de Patreon y los valores de token son incorrectos. Debes copiar y pegar nuevos tokens desde <a href='https://www.patreon.com/platform/documentation/clients'>Patreon website</a> hacia <a href='%{base_path}/admin/site_settings/category/all_results?filter=patreon'>site settings</a>."

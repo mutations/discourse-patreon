@@ -1,15 +1,13 @@
 plugins:
-  patreon_enabled:
+  patreon_creator_enabled:
     default: false
     client: true
-  patreon_login_enabled:
+  patreon_creator_login_enabled:
     default: false
     client: true
-  patreon_client_id:
+  patreon_creator_client_id:
     default: ''
-  patreon_client_secret:
-    default: ''
-  patreon_webhook_secret:
+  patreon_creator_client_secret:
     default: ''
   patreon_creator_discourse_username:
     default: ''
@@ -18,14 +16,15 @@ plugins:
     default: ''
   patreon_creator_refresh_token:
     default: ''
-  patreon_declined_pledges_grace_period_days:
-    default: 7
-  max_patreon_api_reqs_per_hr:
+  patreon_creator_nsfw_group:
+    default: ''
+    type: group
+  patreon_creator_max_patreon_api_reqs_per_hr:
     default: 100
-  max_patreon_api_reqs_per_day:
+  patreon_creator_max_patreon_api_reqs_per_day:
     default: 1000
-  patreon_verbose_log:
+  patreon_creator_verbose_log:
     default: false
-  patreon_login_ignore_state:
+  patreon_creator_login_ignore_state:
     default: false
     hidden: true
