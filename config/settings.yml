@@ -16,6 +16,9 @@ plugins:
     default: ''
   patreon_creator_refresh_token:
     default: ''
+  patreon_creator_nsfw_group:
+    default: ''
+    type: group
   patreon_creator_max_patreon_api_reqs_per_hr:
     default: 100
   patreon_creator_max_patreon_api_reqs_per_day:
