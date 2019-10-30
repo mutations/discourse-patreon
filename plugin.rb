@@ -45,61 +45,19 @@ after_initialize do
     def self.set(key, value)
       store.set(key, value)
     end
-
-    class Reward
-
-      def self.all
-        Patreon.get("rewards") || {}
-      end
-
-    end
-
-    class RewardUser
-
-      def self.all
-        Patreon.get("reward-users") || {}
-      end
-
-    end
   end
 
   [
-    '../app/controllers/patreon_admin_controller.rb',
-    '../app/controllers/patreon_webhook_controller.rb',
-    '../app/jobs/regular/sync_local_patrons_to_groups.rb',
-    '../app/jobs/scheduled/patreon_sync_patrons_to_groups.rb',
     '../app/jobs/scheduled/patreon_update_tokens.rb',
-    '../app/jobs/onceoff/update_brand_images.rb',
-    '../app/jobs/onceoff/migrate_patreon_user_infos.rb',
     '../lib/api.rb',
-    '../lib/seed.rb',
-    '../lib/campaign.rb',
-    '../lib/pledge.rb',
     '../lib/patron.rb',
     '../lib/tokens.rb'
   ].each { |path| load File.expand_path(path, __FILE__) }
 
   AdminDashboardData.problem_messages << ::Patreon::Api::ACCESS_TOKEN_INVALID
 
-  Patreon::Engine.routes.draw do
-    get '/rewards' => 'patreon_admin#rewards', constraints: AdminConstraint.new
-    get '/list' => 'patreon_admin#list', constraints: AdminConstraint.new
-    post '/list' => 'patreon_admin#edit', constraints: AdminConstraint.new
-    delete '/list' => 'patreon_admin#delete', constraints: AdminConstraint.new
-    post '/sync_groups' => 'patreon_admin#sync_groups', constraints: AdminConstraint.new
-    post '/update_data' => 'patreon_admin#update_data', constraints: AdminConstraint.new
-    post '/webhook' => 'patreon_webhook#index'
-  end
-
   Discourse::Application.routes.prepend do
     mount ::Patreon::Engine, at: '/patreon'
-  end
-
-  add_admin_route 'patreon.title', 'patreon'
-
-  Discourse::Application.routes.append do
-    get '/admin/plugins/patreon' => 'admin/plugins#index', constraints: AdminConstraint.new
-    get '/admin/plugins/patreon/list' => 'patreon_admin#list', constraints: AdminConstraint.new
   end
 
   class ::OmniAuth::Strategies::Patreon
