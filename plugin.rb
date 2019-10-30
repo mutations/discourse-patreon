@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-# name: discourse-patreon
-# about: Integration features between Patreon and Discourse
-# version: 2.0
-# author: Rafael dos Santos Silva <xfalcox@gmail.com>
-# url: https://github.com/discourse/discourse-patreon
+# name: discourse-patreon-creator
+# about: Integration features between Patreon and Discourse for Creators
+# version: 1.0
+# author: Dan Bosan from Mutations Limited <dan@mutations.ltd>
+# url: https://github.com/discourse/discourse-patreon-creator
 
 require 'auth/oauth2_authenticator'
 require 'omniauth-oauth2'

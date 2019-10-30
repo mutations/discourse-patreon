@@ -1,8 +1,10 @@
-# Discourse Patreon
+# Discourse Patreon for Creators
 
-Enable syncronization between Discourse Groups and Patreon rewards, and enable Patreon Social Login,
+Enables Login for Patreon Creators, Patrons are not allowed to login when this plugin is installed.
 
 <img src="public/images/patreon-wordmark-navy.png?raw=true" width="292" height="104">
+
+If the Creator has an `Adult content` campaign, then the user is added to the group configured in the plugin settings.  If there is no `Adult content` campaign, then the user is removed from the configured group.
 
 ## Installation
 
@@ -17,6 +19,7 @@ You need to fill the following fields on Settings -> Plugins:
 - Client Secret
 - Creator's Access Token
 - Creator's Refesh Token
+- Creator NSFW Group
 
 To get those values you must have a [Creator account first](https://www.patreon.com/become-a-patreon-creator).
 
@@ -25,20 +28,6 @@ Then go to [Clients & API Keys](https://www.patreon.com/platform/documentation/c
 > The Redirect URIs must be `http://<DISCOURSE BASE URL>/auth/patreon/callback`, like https://meta.discourse.org/auth/patreon/callback for example.
 
 Then you use the generated tokens to configure the plugin.
-
-## Webhooks
-
-You should create [Patreon Webhooks](https://www.patreon.com/platform/documentation/webhooks) so every new pledge get's synced to Discourse ASAP.
-
-> To get it working, create a new Webhook for each trigger type and point then to `https://<DISCOURSE BASE URL>/patreon/webhook`, like https://meta.discourse.org/patreon/webhook for example.
-
-## Group Sync
-
-If you want to give your patrons a special treatment on your board, you can create rules between Discourse Groups and Patreon reward tiers:
-
-<img src="https://meta-s3-cdn.global.ssl.fastly.net/original/3X/a/7/a7ed547cbba142f050f4c4ccc673cde8876eafd1.png">
-
-This can pave the way to grant category access, titles and custom css to please your patrons!
 
 ## Social Login
 
@@ -52,4 +41,4 @@ This is a work in progress! Feel free to use and ask questions here, or on [Meta
 
 ## TODO
 
-- Button to invite patrons who aren't on Discourse yet.
+- Job to sync existing Creators with the corresponding Patreon account
