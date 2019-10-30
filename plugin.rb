@@ -175,6 +175,11 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       SiteSetting.patreon_creator_refresh_token = auth_token[:info][:refresh_token]
     end
 
+    if auth_token[:extra][:raw_info][:campaign][:data].empty?
+      result.failed = true
+      result.failed_reason = "You need to be a Creator to use this forum."
+    end
+
     result
   end
 
