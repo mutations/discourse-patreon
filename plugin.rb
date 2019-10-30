@@ -9,11 +9,9 @@
 require 'auth/oauth2_authenticator'
 require 'omniauth-oauth2'
 
-enabled_site_setting :patreon_enabled
+enabled_site_setting :patreon_creator_enabled
 
-PLUGIN_NAME = 'discourse-patreon'.freeze
-
-register_asset 'stylesheets/patreon.scss'
+PLUGIN_NAME = 'discourse-patreon-creator'.freeze
 
 register_svg_icon "fab-patreon" if respond_to?(:register_svg_icon)
 
@@ -22,8 +20,7 @@ after_initialize do
   require_dependency 'admin_constraint'
 
   module ::Patreon
-    PLUGIN_NAME = 'discourse-patreon'.freeze
-    USER_DETAIL_FIELDS = ["id", "email", "amount_cents", "rewards", "declined_since"].freeze
+    PLUGIN_NAME = 'discourse-patreon-creator'.freeze
 
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
@@ -31,7 +28,7 @@ after_initialize do
     end
 
     def self.default_image_url
-      "#{Discourse.base_url}/plugins/discourse-patreon/images/patreon-logomark-color-on-white.png"
+      "#{Discourse.base_url}/plugins/discourse-patreon-creator/images/patreon-logomark-color-on-white.png"
     end
 
     def self.store
@@ -147,10 +144,10 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
     omniauth.provider :patreon,
                       setup: lambda { |env|
                         strategy = env['omniauth.strategy']
-                        strategy.options[:client_id] = SiteSetting.patreon_client_id
-                        strategy.options[:client_secret] = SiteSetting.patreon_client_secret
+                        strategy.options[:client_id] = SiteSetting.patreon_creator_client_id
+                        strategy.options[:client_secret] = SiteSetting.patreon_creator_client_secret
                         strategy.options[:redirect_uri] = "#{Discourse.base_url}/auth/patreon/callback"
-                        strategy.options[:provider_ignores_state] = SiteSetting.patreon_login_ignore_state
+                        strategy.options[:provider_ignores_state] = SiteSetting.patreon_creator_login_ignore_state
                       }
   end
 
@@ -168,7 +165,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
   end
 
   def enabled?
-    SiteSetting.patreon_login_enabled
+    SiteSetting.patreon_creator_login_enabled
   end
 end
 
@@ -178,4 +175,4 @@ auth_provider pretty_name: 'Patreon',
               frame_width: 840,
               frame_height: 570,
               authenticator: Auth::PatreonAuthenticator.new('patreon', trusted: true),
-              enabled_setting: 'patreon_login_enabled'
+              enabled_setting: 'patreon_creator_login_enabled'
