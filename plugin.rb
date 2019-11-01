@@ -31,23 +31,64 @@ after_initialize do
       "#{Discourse.base_url}/plugins/discourse-patreon-creator/images/patreon-logomark-color-on-white.png"
     end
 
-    def self.store
-      @store ||= PluginStore.new(PLUGIN_NAME)
-    end
-
     def self.get(key)
       store.get(key)
     end
 
+    def self.get_user_info_record(email)
+      get("user_info.#{email}") || {}
+    end
+
+    def self.nsfw_group
+      @nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
+    end
+
+    def self.remove(key)
+      store.remove(key)
+    end
+
+    def self.save_user_info(user, email, patreon_id, has_nsfw_campaign)
+      plugin_store_key = "user_info.#{email}"
+      if user
+        user.custom_fields["patreon_id"] = patreon_id
+        user.custom_fields["has_nsfw_campaign"] = has_nsfw_campaign
+        user.save_custom_fields
+
+        # Remove the temp data from the plugin store
+        remove(plugin_store_key)
+      else
+        # Save data in PluginStore, will be saved to user in
+        # :user_created call back
+
+        user_info_record = get(plugin_store_key) || {}
+        user_info_record[:has_nsfw_campaign] = has_nsfw_campaign
+        user_info_record[:patreon_id] = patreon_id
+        set_user_info_record(email, user_info_record)
+      end
+    end
+
     def self.set(key, value)
       store.set(key, value)
+    end
+
+    def self.set_user_info_record(email, value)
+      set("user_info.#{email}", value)
+    end
+
+    def self.store
+      @store ||= PluginStore.new(PLUGIN_NAME)
+    end
+
+    def self.add_remove_nsfw_group(user, has_nsfw_campaign)
+      return unless user && nsfw_group
+
+      has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
     end
   end
 
   [
     '../app/jobs/scheduled/patreon_update_tokens.rb',
     '../lib/api.rb',
-    '../lib/patron.rb',
     '../lib/tokens.rb'
   ].each { |path| load File.expand_path(path, __FILE__) }
 
@@ -120,17 +161,16 @@ after_initialize do
   DiscourseEvent.on(:user_created) do |user|
     if SiteSetting.patreon_creator_enabled
       begin
-        nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
+        user_info_record = Patreon.get_user_info_record(user.email)
 
-        user_info = Patreon.get("user_info") || {}
-        user_record = user_info[user.email] || {}
-        has_nsfw_campaign = user_record[:has_nsfw_campaign]
+        Patreon.add_remove_nsfw_group(user, user_info_record[:has_nsfw_campaign])
 
-        if nsfw_group && user
-          has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
-        end
-
-        Patreon::Patron.update_local_user(user, user_record[:patreon_id], true)
+        Patreon.save_user_info(
+          user,
+          user.email,
+          user_info_record[:patreon_id],
+          user_info_record[:has_nsfw_campaign]
+        )
       rescue => e
         Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
       end
@@ -172,23 +212,21 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       result.failed = true
       result.failed_reason = "You need to be a Creator to use this forum."
     else
-      nsfw_group = Group.find_by_name(SiteSetting.patreon_creator_nsfw_group)
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
         campaign[:attributes][:is_nsfw]
       end
 
-      # Store Patreon ID and NSFW campaign flag for the user
-      # It will be used in the DiscourseEvent.on(:user_created) callback
-      user_info = Patreon.get("user_info") || {}
-      user_record = user_info[result.email] || {}
-      user_record[:has_nsfw_campaign] = has_nsfw_campaign
-      user_record[:patreon_id] = result.extra_data[:uid]
-      user_info[result.email] = user_record
-      Patreon.set("user_info", user_info)
+      Patreon.add_remove_nsfw_group(user, has_nsfw_campaign)
 
-      if nsfw_group && user
-        has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
-      end
+      # Save the patreon_id and has_nsfw_campaign to the user in the custom fields
+      # When there is no user, the data is stored in the PluginStore
+      # and used in the :user_created event
+      Patreon.save_user_info(
+        user,
+        result.email,
+        result.extra_data[:uid],
+        has_nsfw_campaign
+      )
     end
 
     result
