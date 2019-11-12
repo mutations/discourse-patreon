@@ -210,7 +210,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
 
     unless published_campaign
       result.failed = true
-      result.failed_reason = "This forum is for launched Patreon Creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
+      result.failed_reason = "This forum is for launched Patreon creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
     else
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
         campaign[:attributes][:is_nsfw]
