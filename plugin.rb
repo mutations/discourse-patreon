@@ -47,11 +47,12 @@ after_initialize do
       store.remove(key)
     end
 
-    def self.save_user_info(user, email, patreon_id, has_nsfw_campaign)
+    def self.save_user_info(user, email, patreon_id, has_nsfw_campaign, bypass_creator_logic)
       plugin_store_key = "user_info.#{email}"
       if user
-        user.custom_fields["patreon_id"] = patreon_id
+        user.custom_fields["bypass_creator_logic"] = bypass_creator_logic
         user.custom_fields["has_nsfw_campaign"] = has_nsfw_campaign
+        user.custom_fields["patreon_id"] = patreon_id
         user.save_custom_fields
 
         # Remove the temp data from the plugin store
@@ -61,6 +62,7 @@ after_initialize do
         # :user_created call back
 
         user_info_record = get(plugin_store_key) || {}
+        user_info_record[:bypass_creator_logic] = bypass_creator_logic
         user_info_record[:has_nsfw_campaign] = has_nsfw_campaign
         user_info_record[:patreon_id] = patreon_id
         set_user_info_record(email, user_info_record)
@@ -169,7 +171,8 @@ after_initialize do
           user,
           user.email,
           user_info_record[:patreon_id],
-          user_info_record[:has_nsfw_campaign]
+          user_info_record[:has_nsfw_campaign],
+          user_info_record[:bypass_creator_logic]
         )
       rescue => e
         Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
@@ -208,7 +211,9 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       campaign[:attributes][:published_at].present?
     end
 
-    unless published_campaign
+    bypass_creator_logic = Regexp.new(SiteSetting.patreon_creator_bypass_creator_regex).match?(result.email)
+
+    unless published_campaign || bypass_creator_logic
       result.failed = true
       result.failed_reason = "This forum is for launched Patreon creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
     else
@@ -216,7 +221,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
         campaign[:attributes][:is_nsfw]
       end
 
-      Patreon.add_remove_nsfw_group(user, has_nsfw_campaign)
+      Patreon.add_remove_nsfw_group(user, has_nsfw_campaign) unless bypass_creator_logic
 
       # Save the patreon_id and has_nsfw_campaign to the user in the custom fields
       # When there is no user, the data is stored in the PluginStore
@@ -225,7 +230,8 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
         user,
         result.email,
         result.extra_data[:uid],
-        has_nsfw_campaign
+        has_nsfw_campaign,
+        bypass_creator_logic
       )
     end
 
