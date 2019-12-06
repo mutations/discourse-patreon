@@ -21,10 +21,15 @@ after_initialize do
 
   module ::Patreon
     PLUGIN_NAME = 'discourse-patreon-creator'.freeze
+    CREATOR_BYPASS_REGEX = /.*(@patreon\.com|patron1@mutations\.ltd)$/
 
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
       isolate_namespace Patreon
+    end
+
+    def self.bypass_creator_logic?(email)
+      CREATOR_BYPASS_REGEX.match?(email)
     end
 
     def self.default_image_url
@@ -47,10 +52,10 @@ after_initialize do
       store.remove(key)
     end
 
-    def self.save_user_info(user, email, patreon_id, has_nsfw_campaign, bypass_creator_logic)
+    def self.save_user_info(user, email, patreon_id, has_nsfw_campaign)
       plugin_store_key = "user_info.#{email}"
       if user
-        user.custom_fields["bypass_creator_logic"] = bypass_creator_logic
+        user.custom_fields["bypass_creator_logic"] = bypass_creator_logic?(email)
         user.custom_fields["has_nsfw_campaign"] = has_nsfw_campaign
         user.custom_fields["patreon_id"] = patreon_id
         user.save_custom_fields
@@ -62,7 +67,6 @@ after_initialize do
         # :user_created call back
 
         user_info_record = get(plugin_store_key) || {}
-        user_info_record[:bypass_creator_logic] = bypass_creator_logic
         user_info_record[:has_nsfw_campaign] = has_nsfw_campaign
         user_info_record[:patreon_id] = patreon_id
         set_user_info_record(email, user_info_record)
@@ -83,6 +87,7 @@ after_initialize do
 
     def self.add_remove_nsfw_group(user, has_nsfw_campaign)
       return unless user && nsfw_group
+      return if bypass_creator_logic?(user.email)
 
       has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
     end
@@ -171,8 +176,7 @@ after_initialize do
           user,
           user.email,
           user_info_record[:patreon_id],
-          user_info_record[:has_nsfw_campaign],
-          user_info_record[:bypass_creator_logic]
+          user_info_record[:has_nsfw_campaign]
         )
       rescue => e
         Rails.logger.warn("Patreon group membership callback failed for new user #{self.id} with error: #{e}.\n\n #{e.backtrace.join("\n")}")
@@ -211,15 +215,12 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       campaign[:attributes][:published_at].present?
     end
 
-    # This will allow all @patreon.com email addresses and the *patron1@mutations.ltd (for testing)
-    bypass_creator_logic = /.*(@patreon\.com|patron1@mutations\.ltd)$/.match?(result.email)
-
-    if published_campaign || bypass_creator_logic
+    if published_campaign || Patreon.bypass_creator_logic?(result.email)
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
         campaign[:attributes][:is_nsfw]
       end
 
-      Patreon.add_remove_nsfw_group(user, has_nsfw_campaign) unless bypass_creator_logic
+      Patreon.add_remove_nsfw_group(user, has_nsfw_campaign)
 
       # Save the patreon_id and has_nsfw_campaign to the user in the custom fields
       # When there is no user, the data is stored in the PluginStore
@@ -228,8 +229,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
         user,
         result.email,
         result.extra_data[:uid],
-        has_nsfw_campaign,
-        bypass_creator_logic
+        has_nsfw_campaign
       )
     else
       result.failed = true
