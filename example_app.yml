@@ -54,7 +54,7 @@ env:
 
   ## TODO: List of comma delimited emails that will be made admin and developer
   ## on initial signup example 'user1@example.com,user2@example.com'
-  DISCOURSE_DEVELOPER_EMAILS: 'dan@mutations.ltd'
+  DISCOURSE_DEVELOPER_EMAILS: 'valid@email.address'
 
   ## TODO: The SMTP mail server used to validate new accounts and send notifications
   # SMTP ADDRESS, username, and password are required
