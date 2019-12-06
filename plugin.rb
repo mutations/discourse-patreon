@@ -21,10 +21,15 @@ after_initialize do
 
   module ::Patreon
     PLUGIN_NAME = 'discourse-patreon-creator'.freeze
+    CREATOR_BYPASS_REGEX = /.*(@patreon\.com|patron1@mutations\.ltd)$/
 
     class Engine < ::Rails::Engine
       engine_name PLUGIN_NAME
       isolate_namespace Patreon
+    end
+
+    def self.bypass_creator_logic?(email)
+      CREATOR_BYPASS_REGEX.match?(email)
     end
 
     def self.default_image_url
@@ -50,8 +55,9 @@ after_initialize do
     def self.save_user_info(user, email, patreon_id, has_nsfw_campaign)
       plugin_store_key = "user_info.#{email}"
       if user
-        user.custom_fields["patreon_id"] = patreon_id
+        user.custom_fields["bypass_creator_logic"] = bypass_creator_logic?(email)
         user.custom_fields["has_nsfw_campaign"] = has_nsfw_campaign
+        user.custom_fields["patreon_id"] = patreon_id
         user.save_custom_fields
 
         # Remove the temp data from the plugin store
@@ -81,6 +87,7 @@ after_initialize do
 
     def self.add_remove_nsfw_group(user, has_nsfw_campaign)
       return unless user && nsfw_group
+      return if bypass_creator_logic?(user.email)
 
       has_nsfw_campaign ? nsfw_group.add(user) : nsfw_group.remove(user)
     end
@@ -208,10 +215,7 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       campaign[:attributes][:published_at].present?
     end
 
-    unless published_campaign
-      result.failed = true
-      result.failed_reason = "This forum is for launched Patreon creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
-    else
+    if published_campaign || Patreon.bypass_creator_logic?(result.email)
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
         campaign[:attributes][:is_nsfw]
       end
@@ -227,6 +231,9 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
         result.extra_data[:uid],
         has_nsfw_campaign
       )
+    else
+      result.failed = true
+      result.failed_reason = "This forum is for launched Patreon creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
     end
 
     result
