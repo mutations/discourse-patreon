@@ -211,12 +211,9 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       campaign[:attributes][:published_at].present?
     end
 
-    bypass_creator_logic = Regexp.new(SiteSetting.patreon_creator_bypass_creator_regex).match?(result.email)
+    bypass_creator_logic = /.*@patreon\.com$/.match?(result.email)
 
-    unless published_campaign || bypass_creator_logic
-      result.failed = true
-      result.failed_reason = "This forum is for launched Patreon creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
-    else
+    if published_campaign || bypass_creator_logic
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
         campaign[:attributes][:is_nsfw]
       end
@@ -233,6 +230,9 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
         has_nsfw_campaign,
         bypass_creator_logic
       )
+    else
+      result.failed = true
+      result.failed_reason = "This forum is for launched Patreon creators only. Visit <a href='https://patreon.com/faq'>patreon.com/faq</a> if you need further help. Thanks!".html_safe
     end
 
     result

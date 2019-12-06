@@ -11,7 +11,6 @@ en:
     patreon_creator_max_patreon_api_reqs_per_hr: "Maximum number of Patreon API requests per hour"
     patreon_creator_nsfw_group: 'NSFW Group'
     patreon_creator_verbose_log: 'enable verbose logging of patreon payload'
-    patreon_creator_bypass_creator_regex: "Reg Ex pattern to bypass creator logic"
   dashboard:
     patreon:
       access_token_invalid: "Patreon Creator's access and refresh token values are incorrect. You must copy-paste new tokens from <a href='https://www.patreon.com/platform/documentation/clients'>Patreon website</a> to <a href='%{base_path}/admin/site_settings/category/all_results?filter=patreon'>site settings</a>."

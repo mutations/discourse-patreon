@@ -28,5 +28,3 @@ plugins:
   patreon_creator_login_ignore_state:
     default: false
     hidden: true
-  patreon_creator_bypass_creator_regex:
-    default: ''
