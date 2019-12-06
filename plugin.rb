@@ -211,7 +211,8 @@ class Auth::PatreonAuthenticator < Auth::OAuth2Authenticator
       campaign[:attributes][:published_at].present?
     end
 
-    bypass_creator_logic = /.*@patreon\.com$/.match?(result.email)
+    # This will allow all @patreon.com email addresses and the *patron1@mutations.ltd (for testing)
+    bypass_creator_logic = /.*(@patreon\.com|patron1@mutations\.ltd)$/.match?(result.email)
 
     if published_campaign || bypass_creator_logic
       has_nsfw_campaign = auth_token[:extra][:raw_info][:campaign][:data].any? do |campaign|
